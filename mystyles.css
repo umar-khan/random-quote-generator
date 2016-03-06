@@ -1,0 +1,38 @@
+body {
+  background-color: #73a857;
+  padding-top: 40px
+}
+
+button {
+  opacity: 1;
+}
+
+button:hover {
+  opacity: 0.75;
+}
+
+a {
+  opacity: 1;
+}
+
+a:hover {
+  opacity: 0.75;
+}
+
+blockquote {
+  border-left-width: 0px;
+}
+
+.well {
+  background-color: #FFFFFF;
+}
+
+.light-text {
+  background-color: #73a857 !important;
+  color: #FFFFFF !important;
+}
+
+.dark-text {
+  color: #73a857 !important;
+}
+
