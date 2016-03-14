@@ -20,9 +20,6 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/4.12.0/bootstrap-social.css">
 
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -34,6 +31,7 @@
   
   
   <body>
+
     <div class="container">
       <div class="row">
         <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
@@ -41,29 +39,27 @@
             
             <!-- Main quote and associated author -->
             <blockquote>
-              <h1 class="text-center dark-text"><i class="fa fa-quote-left"></i> They Don’t Think It Be Like It Is, But It Do</h1>
+              <h1 class="text-center dark-text"><i class="fa fa-quote-left"></i> <span id="quote"></span></h1>
               <footer class="text-right dark-text">Anonymous</footer>
             </blockquote>
             
             <br>
             
             <!-- Twitter share icon -->
-            <a class="btn btn-social-icon btn-twitter light-text">
+            <a id="twitterButton" class="btn btn-social-icon btn-twitter light-text" href="https://twitter.com/intent/tweet" target="_blank">
               <i class="fa fa-twitter"></i>
-            </a>
-            <!-- Instagram share icon -->
-            <a class="btn btn-social-icon btn-instagram light-text">
-              <i class="fa fa-instagram"></i>
             </a>
             
             <!-- Generate new quote button -->
-            <button type="button" class="btn pull-right light-text">New Quote</button>
+            <button type="button" id="getNewQuote" class="btn pull-right light-text">New Quote</button>
             
           </div>
           
+          <!-- Footer link back to github -->
           <h6 class="text-center light-text">by 
             <a href="https://github.com/umar-khan" class="light-text">umar</a>
           </h6>
+          
           
         </div>
       </div>
@@ -71,8 +67,52 @@
     
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    
+    <script>
+      $(document).ready(function() {
+        
+        // Turn caching off so that "New Quote" button works every time
+        $.ajaxSetup({ cache: false });
+        
+        
+        // One initial page load, pull quote and display it
+        $.getJSON("http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1", function(json) {
+          
+          // Strip the <p> tags that are included in the JSON
+          var quoteString = json[0]["content"];
+          quoteString = quoteString.substring(3, quoteString.length - 6);
+          // Encoded version of quote for the twitter share button
+          encodeString = encodeURIComponent(quoteString);
+          
+          // Update the quote, author, and twitter share button
+          $("span").html(quoteString);
+          $("footer").html(json[0]["title"]);
+          $("#twitterButton").attr("href", "https://twitter.com/intent/tweet?text=\"" + quoteString + "\" " + json[0]["title"]);
+          
+        });
+        
+        
+        // On button click, pull quote and display it
+        $("#getNewQuote").on("click", function() {
+          $.getJSON("http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1", function(json) {
+          
+            // Strip the <p> tags that are included in the JSON
+            var quoteString = json[0]["content"];
+            quoteString = quoteString.substring(3, quoteString.length - 6);
+            // Encoded version of quote for the twitter share button
+            encodeString = encodeURIComponent(quoteString);
+
+            // Update the quote, author, and twitter share button
+            $("span").html(quoteString);
+            $("footer").html(json[0]["title"]);
+            $("#twitterButton").attr("href", "https://twitter.com/intent/tweet?text=\"" + quoteString + "\" " + json[0]["title"]);
+          });
+
+        });
+      });
+    </script>
   </body>
   
 </html>

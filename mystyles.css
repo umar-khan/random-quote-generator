@@ -1,5 +1,5 @@
 body {
-  background-color: #73a857;
+  background-color: #73a857 !important;
   padding-top: 40px
 }
 
@@ -20,11 +20,11 @@ a:hover {
 }
 
 blockquote {
-  border-left-width: 0px;
+  border-left-width: 0px !important;
 }
 
 .well {
-  background-color: #FFFFFF;
+  background-color: #FFFFFF !important;
 }
 
 .light-text {
