@@ -55,7 +55,7 @@
             
           </div>
           
-          <!-- Footer link back to github -->
+          <!-- Footer with link to github page -->
           <h6 class="text-center light-text">by 
             <a href="https://github.com/umar-khan" class="light-text">umar</a>
           </h6>
@@ -76,20 +76,40 @@
         // Turn caching off so that "New Quote" button works every time
         $.ajaxSetup({ cache: false });
         
-        
-        // One initial page load, pull quote and display it
-        $.getJSON("http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1", function(json) {
-          
-          // Strip the <p> tags that are included in the JSON
+        // Function which performs main page update logic based on input json object
+        function updatePage(json) {
+          // Store quote and author in respective variables
           var quoteString = json[0]["content"];
-          quoteString = quoteString.substring(3, quoteString.length - 6);
+          var quoteAuthor = json[0]["title"];
+
+          // Convert HTML Codes for special characters to plain text
+          quoteString = $('<textarea />').html(quoteString).text();
+          quoteAuthor = $('<textarea />').html(quoteAuthor).text();
+
+          // Remove all HTMl formatting tags from quote
+          quoteString = jQuery(quoteString).text();
+          
+          // Remove all beginning and trailing whitespace from quote
+          quoteString = quoteString.trim();
+          quoteAuthor = quoteAuthor.trim();
+
           // Encoded version of quote for the twitter share button
-          encodeString = encodeURIComponent(quoteString);
+          var encodedQuoteString = encodeURIComponent(quoteString);
+          var encodedQuoteAuthor = encodeURIComponent(quoteAuthor);
+          
           
           // Update the quote, author, and twitter share button
           $("span").html(quoteString);
-          $("footer").html(json[0]["title"]);
-          $("#twitterButton").attr("href", "https://twitter.com/intent/tweet?text=\"" + quoteString + "\" " + json[0]["title"]);
+          $("footer").html(quoteAuthor);
+          $("#twitterButton").attr("href", "https://twitter.com/intent/tweet?text=\"" + encodedQuoteString + "\" " + encodedQuoteAuthor);
+        }
+        
+        
+        // On initial page load, pull quote and display it
+        $.getJSON("http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1", function(json) {
+          
+          // Run function to update entire page
+          updatePage(json);
           
         });
         
@@ -97,17 +117,10 @@
         // On button click, pull quote and display it
         $("#getNewQuote").on("click", function() {
           $.getJSON("http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1", function(json) {
-          
-            // Strip the <p> tags that are included in the JSON
-            var quoteString = json[0]["content"];
-            quoteString = quoteString.substring(3, quoteString.length - 6);
-            // Encoded version of quote for the twitter share button
-            encodeString = encodeURIComponent(quoteString);
-
-            // Update the quote, author, and twitter share button
-            $("span").html(quoteString);
-            $("footer").html(json[0]["title"]);
-            $("#twitterButton").attr("href", "https://twitter.com/intent/tweet?text=\"" + quoteString + "\" " + json[0]["title"]);
+            
+            // Run function to update entire page
+            updatePage(json);
+            
           });
 
         });
