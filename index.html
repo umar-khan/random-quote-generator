@@ -12,17 +12,23 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
     <!-- Optional theme -->
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
     
     <!-- Bootstrap Social -->
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/4.12.0/bootstrap-social.css">
 
+    
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="mystyles.css">
+    <link rel="stylesheet" href="css/mystyles.css">
+    
   </head>
+  
   
   <body>
 
@@ -54,6 +60,7 @@
             <a href="https://github.com/umar-khan" class="light-text">umar</a>
           </h6>
           
+          
         </div>
       </div>
     </div>
@@ -63,61 +70,8 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     
-    <script>
-      $(document).ready(function() {
-        
-        // Turn caching off so that "New Quote" button works every time
-        $.ajaxSetup({ cache: false });
-        
-        // Function which performs main page update logic based on input json object
-        function updatePage(json) {
-          // Store quote and author in respective variables
-          var quoteString = json[0]["content"];
-          var quoteAuthor = json[0]["title"];
-
-          // Convert HTML Codes for special characters to plain text
-          quoteString = $('<textarea />').html(quoteString).text();
-          quoteAuthor = $('<textarea />').html(quoteAuthor).text();
-
-          // Remove all HTMl formatting tags from quote
-          quoteString = jQuery(quoteString).text();
-          
-          // Remove all beginning and trailing whitespace from quote
-          quoteString = quoteString.trim();
-          quoteAuthor = quoteAuthor.trim();
-
-          // Encoded version of quote for the twitter share button
-          var encodedQuoteString = encodeURIComponent(quoteString);
-          var encodedQuoteAuthor = encodeURIComponent(quoteAuthor);
-          
-          // Update the quote, author, and twitter share button
-          $("span").html(quoteString);
-          $("footer").html(quoteAuthor);
-          $("#twitterButton").attr("href", "https://twitter.com/intent/tweet?text=\"" + encodedQuoteString + "\" " + encodedQuoteAuthor);
-        }
-        
-        
-        // On initial page load, pull quote and display it
-        $.getJSON("http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1", function(json) {
-          
-          // Run function to update entire page
-          updatePage(json);
-          
-        });
-        
-        
-        // On button click, pull quote and display it
-        $("#getNewQuote").on("click", function() {
-          $.getJSON("http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1", function(json) {
-            
-            // Run function to update entire page
-            updatePage(json);
-            
-          });
-        });
-        
-      });
-    </script>
+    <!-- Main JS functionality of page -->
+    <script src="js/main.js"></script>
   </body>
   
 </html>
